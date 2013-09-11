@@ -29,6 +29,7 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 	var body = ""
 	for _, p := range people {
 		body += p.Name + "<br />"
+		c.Infof(p.Name)
 	}
 	body += `
 <a href="/add">add</a><br />
@@ -40,9 +41,8 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		c := appengine.NewContext(r)
 
-		c.Infof(string(r.FormValue("name")))
 		e1 := Person {
-			Name: string(r.FormValue("name")),
+			Name: r.FormValue("name"),
 		}
 		_, err := datastore.Put(c, datastore.NewIncompleteKey(c, "Person", nil), &e1)
 		if err != nil {
@@ -54,7 +54,7 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 		var body = `
 <html><body>
 <form action="/add" method="POST">
-    <input type="text name="name" /><br />
+    <input type="text" name="name" /><br />
     <input type="submit" />
 </form>
 </body></html>
