@@ -3,7 +3,7 @@ package hello
 import (
 	"appengine"
 	"appengine/datastore"
-	//	"appengine/user"
+	_ "appengine/user"
 	"fmt"
 	"net/http"
 )
@@ -26,13 +26,13 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var body = ""
+	var body = "<body>"
 	for _, p := range people {
 		body += p.Name + "<br />"
 		c.Infof(p.Name)
 	}
 	body += `
-<a href="/add">add</a><br />
+<a href="/add">add</a><br /></body>
 `
 	fmt.Fprint(w, body)
 }
